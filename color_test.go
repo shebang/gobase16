@@ -3,7 +3,6 @@
 package gobase16
 
 import (
-	// "github.com/shebang/gobase16"
 	"testing"
 )
 
@@ -44,7 +43,6 @@ func TestNewColor(t *testing.T) {
 	if gotColor != expectColor {
 		t.Errorf("expected value=%d, got=%d", expectColor, gotColor)
 	}
-
 }
 
 func TestNewColorErrorHandling(t *testing.T) {
@@ -57,7 +55,6 @@ func TestNewColorErrorHandling(t *testing.T) {
 	if gotColor != expectColor {
 		t.Errorf("expected value=%d, got=%d", expectColor, gotColor)
 	}
-
 }
 
 func TestToHexString(t *testing.T) {
@@ -89,5 +86,4 @@ func TestToHexString(t *testing.T) {
 	if gotString != expectString {
 		t.Errorf("expected value=%s, got=%s", expectString, gotString)
 	}
-
 }

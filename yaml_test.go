@@ -3,7 +3,6 @@
 package gobase16
 
 import (
-	// "github.com/shebang/gobase16"
 	"reflect"
 	"testing"
 )
