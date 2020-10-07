@@ -1,4 +1,4 @@
-package base16
+package gobase16
 
 import (
 	"strconv"

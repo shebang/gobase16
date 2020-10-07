@@ -1,9 +1,7 @@
-// +build test
-
-package base16
+package gobase16
 
 import (
-	"github.com/shebang/base16"
+	// "github.com/shebang/gobase16"
 	"reflect"
 	"testing"
 )
@@ -35,7 +33,7 @@ base0F: "a16946"
 
 // 	testBytes := make([]byte, len(base16TestData))
 // 	copy(testBytes, base16TestData)
-// 	base16.TranslateBytesToLower(testBytes)
+// 	TranslateBytesToLower(testBytes)
 
 // 	expectString = "base0a"
 // 	gotString = string(testBytes)[244:250]
@@ -46,7 +44,7 @@ base0F: "a16946"
 
 func TestBase16YamlLoading(t *testing.T) {
 
-	base16Yaml, _ := base16.UnmarshalBase16Yaml([]byte(base16TestData))
+	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16TestData))
 	var gotString string
 
 	testCases := []struct {
@@ -71,7 +69,7 @@ func TestBase16YamlLoading(t *testing.T) {
 
 func TestGetYamlColorNames(t *testing.T) {
 
-	base16Yaml, _ := base16.UnmarshalBase16Yaml([]byte(base16TestData))
+	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16TestData))
 	got := []string(base16Yaml.GetYamlColorNames())
 	expect := []string{
 		"base00",

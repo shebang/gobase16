@@ -1,9 +1,7 @@
-// +build test
-
-package base16
+package gobase16
 
 import (
-	"github.com/shebang/base16"
+	// "github.com/shebang/gobase16"
 	"reflect"
 	"testing"
 )
@@ -12,19 +10,19 @@ func TestColorNameIndex(t *testing.T) {
 	var gotInt int
 	var expectInt int
 
-	gotInt = base16.ColorNameIndex("base00")
+	gotInt = ColorNameIndex("base00")
 	expectInt = 0
 	if gotInt != expectInt {
 		t.Errorf("expected value=%d, got=%d", expectInt, gotInt)
 	}
 
-	gotInt = base16.ColorNameIndex("base0a")
+	gotInt = ColorNameIndex("base0a")
 	expectInt = 10
 	if gotInt != expectInt {
 		t.Errorf("expected value=%d, got=%d", expectInt, gotInt)
 	}
 
-	gotInt = base16.ColorNameIndex("base0f")
+	gotInt = ColorNameIndex("base0f")
 	expectInt = 15
 	if gotInt != expectInt {
 		t.Errorf("expected value=%d, got=%d", expectInt, gotInt)
@@ -35,19 +33,19 @@ func TestColorIndexName(t *testing.T) {
 	var gotString string
 	var expectString string
 
-	gotString = base16.ColorIndexName(0)
+	gotString = ColorIndexName(0)
 	expectString = "base00"
 	if gotString != expectString {
 		t.Errorf("expected value=%s, got=%s", expectString, gotString)
 	}
 
-	gotString = base16.ColorIndexName(10)
+	gotString = ColorIndexName(10)
 	expectString = "base0a"
 	if gotString != expectString {
 		t.Errorf("expected value=%s, got=%s", expectString, gotString)
 	}
 
-	gotString = base16.ColorIndexName(15)
+	gotString = ColorIndexName(15)
 	expectString = "base0f"
 	if gotString != expectString {
 		t.Errorf("expected value=%s, got=%s", expectString, gotString)
@@ -57,7 +55,7 @@ func TestColorIndexName(t *testing.T) {
 
 func TestGetColorNames(t *testing.T) {
 
-	got := []string(base16.ColorNames(16))
+	got := []string(ColorNames(16))
 	expect := []string{
 		"base00",
 		"base01",
@@ -85,23 +83,23 @@ func TestGetColorNames(t *testing.T) {
 func TestValidColorName(t *testing.T) {
 
 	colorname := "base00"
-	if !base16.ValidColorName(colorname) {
+	if !ValidColorName(colorname) {
 		t.Errorf("expected colorname=%s to be valid (true)", colorname)
 	}
 	colorname = "base0a"
-	if !base16.ValidColorName(colorname) {
+	if !ValidColorName(colorname) {
 		t.Errorf("expected colorname=%s to be valid (true)", colorname)
 	}
 	colorname = "base0f"
-	if !base16.ValidColorName(colorname) {
+	if !ValidColorName(colorname) {
 		t.Errorf("expected colorname=%s to be valid (true)", colorname)
 	}
 	colorname = "base10"
-	if base16.ValidColorName(colorname) {
+	if ValidColorName(colorname) {
 		t.Errorf("expected colorname=%s to be invalid (true)", colorname)
 	}
 	colorname = "base10"
-	if !base16.ValidColorName(colorname, true) {
+	if !ValidColorName(colorname, true) {
 		t.Errorf("expected colorname=%s to be valid (true)", colorname)
 	}
 }
