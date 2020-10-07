@@ -8,45 +8,9 @@ import (
 	"testing"
 )
 
-var base16YamlTestData = `
-scheme: "Default Dark"
-author: "Chris Kempson (http://chriskempson.com)"
-base00: "181818"
-base01: "282828"
-base02: "383838"
-base03: "585858"
-base04: "b8b8b8"
-base05: "d8d8d8"
-base06: "e8e8e8"
-base07: "f8f8f8"
-base08: "ab4642"
-base09: "dc9656"
-base0A: "f7ca88"
-base0B: "a1b56c"
-base0C: "86c1b9"
-base0D: "7cafc2"
-base0E: "ba8baf"
-base0F: "a16946"
-`
+func TestUnmarshalBase16Yaml(t *testing.T) {
 
-// func TestBase16YamlTranslateToLower(t *testing.T) {
-// 	var expectString string
-// 	var gotString string
-
-// 	testBytes := make([]byte, len(base16TestData))
-// 	copy(testBytes, base16TestData)
-// 	TranslateBytesToLower(testBytes)
-
-// 	expectString = "base0a"
-// 	gotString = string(testBytes)[244:250]
-// 	if gotString != expectString {
-// 		t.Errorf("expected value=%s got=%s", expectString, gotString)
-// 	}
-// }
-
-func TestBase16YamlLoading(t *testing.T) {
-
-	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16YamlTestData))
+	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16TestData["default-dark.yaml"]))
 	var gotString string
 
 	testCases := []struct {
@@ -69,9 +33,26 @@ func TestBase16YamlLoading(t *testing.T) {
 	}
 }
 
+func TestUnmarshalBase16YamlError(t *testing.T) {
+
+	_, err := UnmarshalBase16Yaml([]byte(base16TestData["invalid-yaml.yaml"]))
+	if err == nil {
+		t.Errorf("expected error not nil")
+	}
+	_, err = UnmarshalBase16Yaml([]byte(base16TestData["default-dark-extended-invalid.yaml"]))
+	if err == nil {
+		t.Errorf("expected error not nil")
+	}
+	_, err = UnmarshalBase16Yaml([]byte(base16TestData["default-dark-missing-colors.yaml"]))
+	if err == nil {
+		t.Errorf("expected error not nil")
+	}
+
+}
+
 func TestGetYamlColorNames(t *testing.T) {
 
-	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16YamlTestData))
+	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16TestData["default-dark.yaml"]))
 	got := []string(base16Yaml.getYamlColorNames())
 	expect := []string{
 		"base00",

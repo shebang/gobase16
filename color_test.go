@@ -59,3 +59,35 @@ func TestNewColorErrorHandling(t *testing.T) {
 	}
 
 }
+
+func TestToHexString(t *testing.T) {
+	var color Color
+	var expectString string
+	var gotString string
+
+	// black
+	color = NewColor("000000")
+	expectString = "000000"
+	gotString = color.ToHexString()
+
+	if gotString != expectString {
+		t.Errorf("expected value=%s, got=%s", expectString, gotString)
+	}
+	// white
+	color = NewColor("ffffff")
+	expectString = "ffffff"
+	gotString = color.ToHexString()
+
+	if gotString != expectString {
+		t.Errorf("expected value=%s, got=%s", expectString, gotString)
+	}
+	// #f7ca88
+	color = NewColor("f7ca88")
+	expectString = "f7ca88"
+	gotString = color.ToHexString()
+
+	if gotString != expectString {
+		t.Errorf("expected value=%s, got=%s", expectString, gotString)
+	}
+
+}

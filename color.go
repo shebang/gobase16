@@ -1,6 +1,7 @@
 package gobase16
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -40,4 +41,9 @@ func NewColor(rrggbb string) Color {
 		}
 	}
 	return NoColor
+}
+
+// ToHexString returns a 6 characters long hex string of the color value
+func (c Color) ToHexString() string {
+	return fmt.Sprintf("%02x%02x%02x", (c>>16)&0xff, (c>>8)&0xff, c&0xff)
 }

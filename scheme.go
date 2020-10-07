@@ -2,7 +2,6 @@ package gobase16
 
 import (
 	// "fmt"
-	"io/ioutil"
 	// "os"
 	"strings"
 )
@@ -27,77 +26,17 @@ type Scheme struct {
 	// keys are automatically converted to lower case characters.
 	colors map[string]Color
 
-	// originalKeys maps lower case key names to the case of the original key
-	// names so that the original case is preserved when writing files
-	originalKeys map[string]string
+	// fileKeys maps lower case key names (memory) to the case of the original key
+	// names in the yaml file so that the original case is preserved when writing
+	// files.
+	fileKeys Base16FileKeys
+
+	// // sortedColorNames contains all color names sorted alphabetically.
+	// sortedColorNames []string
 
 	// extendedMode is a flag which will be set when more than 16 colors are
 	// defined.
 	extendedMode bool
-}
-
-// FileReaderFunc declares the function signature to read a file
-type FileReaderFunc func(string) ([]byte, error)
-
-// LoadBase16Scheme loads a base16 scheme from file fname. reader can be used to
-// pass a file reader function as dependecy injection.
-func LoadBase16Scheme(fname string, reader ...FileReaderFunc) (*Scheme, error) {
-	var err error
-	var data []byte
-	var base16Yaml *Base16Yaml
-	var fileReader FileReaderFunc = ioutil.ReadFile
-	// if _, err = os.Stat(fname); os.IsNotExist(err) {
-	// 	return nil, err
-	// }
-
-	if len(reader) == 1 {
-		// fmt.Printf("len reader == 1 reader=%+v", reader[0])
-		fileReader = reader[0]
-	}
-	data, err = fileReader(fname)
-	if err != nil {
-		return nil, err
-	}
-	base16Yaml, err = UnmarshalBase16Yaml(data)
-	if err != nil {
-		return nil, err
-	}
-
-	base16Scheme, err := fromBase16Yaml(base16Yaml)
-	if err != nil {
-		return nil, err
-	}
-
-	return base16Scheme, nil
-
-}
-
-func fromBase16Yaml(base16Yaml *Base16Yaml) (*Scheme, error) {
-	extendedMode := false
-	if len(base16Yaml.ColorNames) > 16 {
-		extendedMode = true
-	}
-
-	scheme := Scheme{
-		author:       base16Yaml.Data["author"],
-		scheme:       base16Yaml.Data["scheme"],
-		colors:       make(map[string]Color, len(base16Yaml.ColorNames)),
-		originalKeys: make(map[string]string, len(base16Yaml.Data)),
-		extendedMode: extendedMode,
-	}
-
-	colorName := ""
-	for k, v := range base16Yaml.Data {
-		if ValidColorName(k, extendedMode) {
-			colorName = strings.ToLower(k)
-			scheme.originalKeys[colorName] = k
-			scheme.colors[colorName] = NewColor(v)
-		} else {
-			scheme.originalKeys[strings.ToLower(k)] = v
-		}
-	}
-
-	return &scheme, nil
 }
 
 // Author returns the author of the scheme

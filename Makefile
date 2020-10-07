@@ -40,12 +40,11 @@ $(BIN)/%: | $(BIN) ; $(info $(M) building $(PACKAGE)…)
 GOLINT = $(BIN)/golint
 $(BIN)/golint: PACKAGE=golang.org/x/lint/golint
 
-.PHONY: test/cover
-test/cover: 	## Run tests and test coverage
+.PHONY: test-coverage-html
+test-coverage-html: 	## Run tests and test coverage
 	$(GOTEST) -v -coverprofile=coverage.out ./...
 	$(GOCOVER) -func=coverage.out
 	$(GOCOVER) -html=coverage.out
-	# go test -v --tags=integration ./...
 
 .PHONY: test
 test: 	## Run unit tests
