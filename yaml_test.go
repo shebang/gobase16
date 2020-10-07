@@ -1,3 +1,5 @@
+// +build !integration
+
 package gobase16
 
 import (
@@ -6,7 +8,7 @@ import (
 	"testing"
 )
 
-var base16TestData = `
+var base16YamlTestData = `
 scheme: "Default Dark"
 author: "Chris Kempson (http://chriskempson.com)"
 base00: "181818"
@@ -44,7 +46,7 @@ base0F: "a16946"
 
 func TestBase16YamlLoading(t *testing.T) {
 
-	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16TestData))
+	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16YamlTestData))
 	var gotString string
 
 	testCases := []struct {
@@ -69,8 +71,8 @@ func TestBase16YamlLoading(t *testing.T) {
 
 func TestGetYamlColorNames(t *testing.T) {
 
-	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16TestData))
-	got := []string(base16Yaml.GetYamlColorNames())
+	base16Yaml, _ := UnmarshalBase16Yaml([]byte(base16YamlTestData))
+	got := []string(base16Yaml.getYamlColorNames())
 	expect := []string{
 		"base00",
 		"base01",

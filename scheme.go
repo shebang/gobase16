@@ -3,7 +3,7 @@ package gobase16
 import (
 	// "fmt"
 	"io/ioutil"
-	"os"
+	// "os"
 	"strings"
 )
 
@@ -16,7 +16,6 @@ const (
 // Scheme is the internal representation of a base16 colors scheme. All color
 // names are converted to lower case characters in order to avoid confusion when
 // accessing color names.
-
 type Scheme struct {
 	// auther contains the author of the scheme
 	author string
@@ -37,18 +36,25 @@ type Scheme struct {
 	extendedMode bool
 }
 
+// FileReaderFunc declares the function signature to read a file
 type FileReaderFunc func(string) ([]byte, error)
 
-func LoadBase16Scheme(fname string, reader ...interface{}) (*Scheme, error) {
+// LoadBase16Scheme loads a base16 scheme from file fname. reader can be used to
+// pass a file reader function as dependecy injection.
+func LoadBase16Scheme(fname string, reader ...FileReaderFunc) (*Scheme, error) {
 	var err error
 	var data []byte
 	var base16Yaml *Base16Yaml
+	var fileReader FileReaderFunc = ioutil.ReadFile
+	// if _, err = os.Stat(fname); os.IsNotExist(err) {
+	// 	return nil, err
+	// }
 
-	if _, err = os.Stat(fname); os.IsNotExist(err) {
-		return nil, err
+	if len(reader) == 1 {
+		// fmt.Printf("len reader == 1 reader=%+v", reader[0])
+		fileReader = reader[0]
 	}
-
-	data, err = ioutil.ReadFile(fname)
+	data, err = fileReader(fname)
 	if err != nil {
 		return nil, err
 	}

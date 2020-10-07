@@ -23,7 +23,7 @@ func ColorIndexName(index int) string {
 	return fmt.Sprintf("base%02x", index)
 }
 
-// Colors returns the colors
+// ColorNames generates a slice of strings with base16 color names.
 func ColorNames(count int) []string {
 	keys := make([]string, 0, count)
 	for i := 0; i < count; i++ {
