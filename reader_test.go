@@ -208,7 +208,7 @@ func TestLoadBase16SchemeError(t *testing.T) {
 	}
 }
 
-func TestGetColor(t *testing.T) {
+func TestGetColorAfterLoadingScheme(t *testing.T) {
 	var gotColor Color
 	var expectColor Color
 

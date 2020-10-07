@@ -1,8 +1,7 @@
 package gobase16
 
 import (
-	// "fmt"
-	// "os"
+	"fmt"
 	"strings"
 )
 
@@ -10,6 +9,7 @@ const (
 	// ExtendedModeMaxColors specifies how many colors can be used in base16
 	// extended mode.
 	ExtendedModeMaxColors = 32
+	Base16DefaultColors   = 16
 )
 
 // Scheme is the internal representation of a base16 colors scheme. All color
@@ -32,11 +32,47 @@ type Scheme struct {
 	fileKeys Base16FileKeys
 
 	// // sortedColorNames contains all color names sorted alphabetically.
-	// sortedColorNames []string
+	sortedColorNames []string
 
 	// extendedMode is a flag which will be set when more than 16 colors are
 	// defined.
 	extendedMode bool
+}
+
+func NewScheme(schemeName string, author string, countColorsOverride ...int) (*Scheme, error) {
+	countColors := Base16DefaultColors
+	extendedMode := false
+	fmt.Printf("over=%v", len(countColorsOverride))
+	if len(countColorsOverride) == 1 {
+		if countColorsOverride[0] > ExtendedModeMaxColors || countColorsOverride[0] < Base16DefaultColors {
+			return nil, fmt.Errorf(
+				"scheme must have at least %d colors and at most %d colors",
+				Base16DefaultColors,
+				ExtendedModeMaxColors,
+			)
+		}
+		if countColorsOverride[0] > Base16DefaultColors {
+			extendedMode = true
+			countColors = countColorsOverride[0]
+		}
+	}
+
+	scheme := Scheme{
+		scheme:           schemeName,
+		author:           author,
+		extendedMode:     extendedMode,
+		sortedColorNames: ColorNames(countColors),
+		colors:           make(map[string]Color, countColors),
+		fileKeys: Base16FileKeys{
+			colorNameKeys: make(map[string]string, countColors),
+			otherKeys:     make(map[string]string, 2),
+		},
+	}
+
+	for _, k := range scheme.sortedColorNames {
+		scheme.colors[k] = NoColor
+	}
+	return &scheme, nil
 }
 
 // Author returns the author of the scheme
@@ -59,8 +95,14 @@ func (scheme *Scheme) GetColor(colorname string) Color {
 	return scheme.colors[strings.ToLower(colorname)]
 }
 
+// GetColorNames returns a sorted string slice of all color names
+func (scheme *Scheme) GetColorNames() []string {
+	return scheme.sortedColorNames
+}
+
 // SetColor sets the color c for color name
-func (scheme *Scheme) SetColor(c Color, colorname string) {
+func (scheme *Scheme) SetColor(colorname string, c Color) {
+	scheme.colors[strings.ToLower(colorname)] = c
 }
 
 // ExtendedModeOn returns the extended mode flag
